@@ -16,7 +16,7 @@ public class WordRepository {
         mAllWords = mWordDao.getAllWords();
     }
 
-    LiveData<List<Word>> getmAllWords(){
+    LiveData<List<Word>> getAllWords(){
         return mAllWords;
     }
 
