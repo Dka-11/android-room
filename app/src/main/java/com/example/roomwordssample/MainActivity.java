@@ -1,27 +1,25 @@
 package com.example.roomwordssample;
 
 import android.os.Bundle;
-
 import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.View;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+import androidx.lifecycle.Observer;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.roomwordssample.databinding.ActivityMainBinding;
 
+import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
+    private WordViewModel mWordViewModel;
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
@@ -46,6 +44,16 @@ public class MainActivity extends AppCompatActivity {
         final WordListAdapter adapter = new WordListAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mWordViewModel = ViewModelProviders.of(this).get(WordViewModel.class);
+
+        mWordViewModel.getAllWords().observe(this, new Observer<List<Word>>() {
+            @Override
+            public void onChanged(@Nullable final List<Word> words) {
+                // Update the cached copy of the words in the adapter.
+                adapter.setWords(words);
+            }
+        });
     }
 
     @Override
