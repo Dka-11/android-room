@@ -49,4 +49,7 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$rootProject.archLifecycleVersion"
     annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archLifecycleVersion"
 
+//    Homework
+    implementation "androidx.activity:activity:1.6.0-alpha05"
+
 }

@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -14,6 +13,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
 
     private final LayoutInflater mInflater;
     private List<Word> mWords; // Cached copy of words
+    private static ClickListener clickListener;
 
     WordListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -25,8 +25,6 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         return new WordViewHolder(itemView);
     }
 
-    @NonNull
-
     @Override
     public void onBindViewHolder(WordViewHolder holder, int position) {
         if (mWords != null) {
@@ -36,6 +34,9 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
             // Covers the case of data not being ready yet.
             holder.wordItemView.setText("No Word");
         }
+    }
+    public Word getWordAtPosition (int position) {
+        return mWords.get(position);
     }
 
     void setWords(List<Word> words){
@@ -52,12 +53,26 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         else return 0;
     }
 
+    public void setOnItemClickListener(ClickListener clickListener) {
+        WordListAdapter.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(View v, int position);
+    }
+
     class WordViewHolder extends RecyclerView.ViewHolder {
         private final TextView wordItemView;
 
         private WordViewHolder(View itemView) {
             super(itemView);
             wordItemView = itemView.findViewById(R.id.textView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onItemClick(view, getAdapterPosition());
+                }
+            });
         }
     }
 }
